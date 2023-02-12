@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  --dark-green: rgb(19, 116, 84);
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  width: 360px;
+  height: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.gameboard {
+  display: grid;
+  grid-template: 1fr 1fr 1fr/1fr 1fr 1fr;
+  gap: 15px;
+  height: 100%;
+  margin-top: 20px;
+}
+
+.cell {
+  height: 100px;
+  width: 100px;
+  background-color: aqua;
+  border: solid var(--dark-green) 5px;
+}
+
+h1,
+.start {
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.start {
+  padding: 5px 20px;
+  background-color: var(--dark-green);
+  border: var(--dark-green) 3px solid;
+  color: aliceblue;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.players-form {
+  background-color: greenyellow;
+  height: auto;
+  width: 60%;
+  position: absolute;
+  top: 10%;
+  right: 20%;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  border: 10px darkblue solid;
+}
+
+.players-form > input {
+  width: 100%;
+  padding: 2px 10px;
+  border: 2px solid var(--dark-green);
+  outline: none;
+}
+
+.players-form > .submit-player {
+  background-color: var(--dark-green);
+  color: aliceblue;
+}
+
+.players-form > h2 {
+  margin-bottom: 15px;
+}
