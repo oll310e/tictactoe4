@@ -9,6 +9,20 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="container"></div>
+    <form class="players-form">
+      <h2>Make a Player</h2>
+      <label for="name">Name</label>
+      <input type="text" id="name" />
+      <label for="sign">Sign</label>
+      <input type="text" id="sign" maxlength="1" />
+      <label for="turn">First Turn?</label>
+      <input type="checkbox" id="turn" />
+      <input type="submit" class="submit-player" />
+    </form>
+    <div class="container">
+      <h1>TicTacToe</h1>
+      <button class="start">Start</button>
+      <div class="gameboard"></div>
+    </div>
   </body>
 </html>
