@@ -1,84 +1,145 @@
-(function setupGameboard() {
-  for (let i = 1; i < 10; i++) {
-    let cell = document.createElement("div");
-    cell.classList.add("cell");
+let tictactoe = (function () {
+  //Setup
+  (function setupGameboard() {
+    for (let i = 1; i < 10; i++) {
+      let cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.setAttribute("cell-id", i);
 
-    let gameboard = document.querySelector(".gameboard");
-    gameboard.appendChild(cell);
+      let gameboard = document.querySelector(".gameboard");
+      gameboard.appendChild(cell);
+    }
+  })();
+
+  function SetUpDomQuery() {
+    return {
+      gameboard: document.querySelector(".gameboard"),
+      cells: document.querySelectorAll(".cell"),
+      startBtn: document.querySelector(".start"),
+      playersForm: document.querySelector(".players-form"),
+      playerName: document.querySelector("#name"),
+      playerSign: document.querySelector("#sign"),
+    };
   }
-})();
 
-function SetUpDomQuery() {
-  return {
-    gameboard: document.querySelector(".gameboard"),
-    startBtn: document.querySelector(".start"),
-    playersForm: document.querySelector(".players-form"),
-    playerName: document.querySelector("#name"),
-    playerSign: document.querySelector("#sign"),
-    playerTurn: document.querySelector("#turn"),
-  };
-}
+  const DOM = SetUpDomQuery();
 
-const DOM = SetUpDomQuery();
+  function Player(name, sign) {
+    this.sign = sign.toUpperCase();
+    this.name = name;
+    this.addSign = function (e) {
+      if (e.target.innerText == "") {
+        e.target.innerText = `${this.sign}`;
+        checkWin();
+        toggleTurnPlayer();
+      }
+    };
+  }
 
-//
+  let gameStarted = false;
+  let players = [];
+  let playerIndex = 0;
 
-function Player(sign, name) {
-  this.sign = sign;
-  this.name = name;
-  this.addSign = function (e) {
-    console.log(e.target, this.sign);
-  };
-}
+  //Functions
 
-function addPlayers() {
-  togglePlayersForm();
-}
+  function addPlayers() {
+    togglePlayersForm();
+  }
 
-function togglePlayersForm() {
-  if (DOM.playersForm.classList.contains("hidden")) {
+  function togglePlayersForm() {
     DOM.playersForm.classList.toggle("hidden");
   }
-}
 
-function emptyForm() {
-  DOM.playerName.value = "";
-  DOM.playerSign.value = "";
-}
-
-//Events
-
-let gameStarted = false;
-
-DOM.startBtn.addEventListener("click", (e) => {
-  addPlayers();
-  gameStarted = true;
-});
-
-DOM.playersForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let name = DOM.playerName.value;
-  let sign = DOM.playerSign.value;
-
-  let newPlayer = new Player(name, sign);
-
-  DOM.playersForm.classList.toggle("hidden");
-
-  emptyForm();
-
-  console.log(newPlayer);
-});
-
-DOM.gameboard.addEventListener("click", (e) => {
-  if (e.target.classList.contains("cell") && gameStarted) {
-    turnPlayer.addSign(e);
+  function emptyForm() {
+    DOM.playerName.value = "";
+    DOM.playerSign.value = "";
   }
-});
 
-//start game
+  function startGame() {
+    gameStarted = true;
+  }
 
-//add player
+  function toggleTurnPlayer() {
+    if (playerIndex == 0) {
+      playerIndex = 1;
+    } else {
+      playerIndex = 0;
+    }
+  }
 
-//place sign
+  function clearGame() {
+    DOM.cells.forEach((cell) => {
+      cell.innerText = "";
+    });
+    players = [];
+  }
 
-//
+  function checkWin() {
+    let c = DOM.cells;
+    if (
+      (c[0].innerText == players[playerIndex].sign &&
+        c[1].innerText == players[playerIndex].sign &&
+        c[2].innerText == players[playerIndex].sign) ||
+      (c[3].innerText == players[playerIndex].sign &&
+        c[4].innerText == players[playerIndex].sign &&
+        c[5].innerText == players[playerIndex].sign) ||
+      (c[6].innerText == players[playerIndex].sign &&
+        c[7].innerText == players[playerIndex].sign &&
+        c[8].innerText == players[playerIndex].sign) ||
+      (c[0].innerText == players[playerIndex].sign &&
+        c[3].innerText == players[playerIndex].sign &&
+        c[6].innerText == players[playerIndex].sign) ||
+      (c[1].innerText == players[playerIndex].sign &&
+        c[4].innerText == players[playerIndex].sign &&
+        c[7].innerText == players[playerIndex].sign) ||
+      (c[2].innerText == players[playerIndex].sign &&
+        c[5].innerText == players[playerIndex].sign &&
+        c[8].innerText == players[playerIndex].sign) ||
+      (c[0].innerText == players[playerIndex].sign &&
+        c[4].innerText == players[playerIndex].sign &&
+        c[8].innerText == players[playerIndex].sign) ||
+      (c[2].innerText == players[playerIndex].sign &&
+        c[4].innerText == players[playerIndex].sign &&
+        c[6].innerText == players[playerIndex].sign)
+    ) {
+      winner(players[playerIndex]);
+    }
+  }
+
+  function winner(player) {
+    alert(
+      `${player.name}, ${player.sign} Enjoys Winner Winner Chicken Dinner!!`
+    );
+    clearGame();
+  }
+
+  //Events
+
+  DOM.startBtn.addEventListener("click", (e) => {
+    clearGame();
+    addPlayers();
+  });
+
+  DOM.playersForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (players.length == 1) {
+      togglePlayersForm();
+      startGame();
+    }
+
+    let name = DOM.playerName.value;
+    let sign = DOM.playerSign.value;
+
+    let newPlayer = new Player(name, sign);
+    players.push(newPlayer);
+
+    emptyForm();
+  });
+
+  DOM.gameboard.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cell") && gameStarted) {
+      players[playerIndex].addSign(e);
+    }
+  });
+})();
